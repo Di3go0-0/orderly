@@ -1,0 +1,27 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /orders",
+  "rawPath": "/orders",
+  "rawQueryString": "",
+  "headers": { "content-type": "application/json" },
+  "requestContext": {
+    "accountId": "123456789012",
+    "apiId": "local",
+    "domainName": "localhost",
+    "domainPrefix": "local",
+    "http": { "method": "POST", "path": "/orders", "protocol": "HTTP/1.1", "sourceIp": "127.0.0.1", "userAgent": "invoke" },
+    "requestId": "local",
+    "routeKey": "POST /orders",
+    "stage": "$default",
+    "time": "16/Oct/2026:00:00:00 +0000",
+    "timeEpoch": 0,
+    "authorizer": {
+      "jwt": {
+        "claims": { "sub": "customer-local", "email": "cliente@example.com", "cognito:groups": "[customer]" },
+        "scopes": null
+      }
+    }
+  },
+  "body": "{\"lines\":[{\"productId\":\"REEMPLAZA_CON_ID_DE_PRODUCTO\",\"quantity\":2}]}",
+  "isBase64Encoded": false
+}

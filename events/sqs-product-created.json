@@ -1,0 +1,15 @@
+{
+  "Records": [
+    {
+      "messageId": "msg-1",
+      "receiptHandle": "x",
+      "body": "{\"version\":\"0\",\"id\":\"eb-1\",\"detail-type\":\"ProductCreated\",\"source\":\"orderly.catalog\",\"account\":\"123456789012\",\"time\":\"2026-10-16T00:00:00Z\",\"region\":\"us-east-1\",\"resources\":[],\"detail\":{\"eventId\":\"evt-local-2\",\"eventType\":\"ProductCreated\",\"source\":\"catalog\",\"aggregateId\":\"prod-local-1\",\"occurredAt\":\"2026-10-16T00:00:00.000Z\",\"payload\":{\"product\":{\"id\":\"prod-local-1\",\"name\":\"Zapato rojo\",\"description\":\"Cuero, talla 42\",\"priceCents\":129900,\"stock\":3,\"tags\":[\"calzado\",\"rojo\"],\"createdAt\":\"2026-10-16T00:00:00.000Z\",\"updatedAt\":\"2026-10-16T00:00:00.000Z\"}}}}",
+      "attributes": { "ApproximateReceiveCount": "1", "SentTimestamp": "0", "SenderId": "x", "ApproximateFirstReceiveTimestamp": "0" },
+      "messageAttributes": {},
+      "md5OfBody": "x",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:orderly-dev-index",
+      "awsRegion": "us-east-1"
+    }
+  ]
+}

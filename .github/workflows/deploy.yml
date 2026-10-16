@@ -1,0 +1,80 @@
+# Deploy: en cada push a main (o manual). Requiere las variables de repositorio:
+#   AWS_ROLE_ARN, AWS_REGION, TF_STATE_BUCKET, NOTIFICATION_EMAIL, ENABLE_OPENSEARCH (opcional)
+# Orden: tests -> apply del módulo search (garantiza el repo ECR) -> build+push imagen -> apply completo.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false # nunca cancelar un apply a medias
+
+jobs:
+  deploy:
+    name: Deploy dev
+    if: vars.AWS_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    env:
+      TF_DIR: terraform/envs/dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.16.6"
+          terraform_wrapper: false
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Terraform init
+        run: |
+          terraform -chdir=$TF_DIR init -input=false \
+            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
+            -backend-config="key=envs/dev/terraform.tfstate" \
+            -backend-config="region=${{ vars.AWS_REGION }}" \
+            -backend-config="use_lockfile=true"
+
+      - name: Ensure ECR repository exists
+        run: |
+          terraform -chdir=$TF_DIR apply -auto-approve -input=false -target=module.search \
+            -var "notification_email=${{ vars.NOTIFICATION_EMAIL }}" \
+            -var "enable_opensearch=${{ vars.ENABLE_OPENSEARCH || 'false' }}"
+
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr
+
+      - name: Build & push indexer image
+        run: |
+          REPO=$(terraform -chdir=$TF_DIR output -raw ecr_repository_url)
+          docker build --platform linux/amd64 -f services/search/Dockerfile \
+            -t "$REPO:${GITHUB_SHA::7}" -t "$REPO:latest" .
+          docker push "$REPO:${GITHUB_SHA::7}"
+          docker push "$REPO:latest"
+
+      - name: Terraform apply
+        run: |
+          terraform -chdir=$TF_DIR apply -auto-approve -input=false \
+            -var "notification_email=${{ vars.NOTIFICATION_EMAIL }}" \
+            -var "enable_opensearch=${{ vars.ENABLE_OPENSEARCH || 'false' }}"
+
+      - name: Outputs
+        run: terraform -chdir=$TF_DIR output

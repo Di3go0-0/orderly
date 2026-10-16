@@ -1,0 +1,26 @@
+# Node
+node_modules/
+dist/
+coverage/
+*.log
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+crash.log
+terraform/envs/*/backend.hcl
+terraform/envs/*/*.auto.tfvars
+terraform/bootstrap/*.auto.tfvars
+
+# Local secrets / env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

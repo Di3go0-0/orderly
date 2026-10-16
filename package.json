@@ -1,0 +1,48 @@
+{
+  "name": "orderly",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mini plataforma de pedidos serverless en AWS: Lambda, DynamoDB, EventBridge, SQS, SNS, OpenSearch y Terraform.",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "RUN_INTEGRATION=1 vitest run",
+    "invoke": "tsx scripts/invoke.ts",
+    "reindex": "tsx scripts/reindex.ts",
+    "local:up": "docker compose up -d",
+    "local:down": "docker compose down -v",
+    "local:init": "tsx scripts/local-init.ts",
+    "tf:fmt": "terraform fmt -recursive terraform",
+    "tf:validate": "bash scripts/tf-validate.sh"
+  },
+  "dependencies": {
+    "@aws-crypto/sha256-js": "^5.2.0",
+    "@aws-sdk/client-dynamodb": "^3.700.0",
+    "@aws-sdk/client-eventbridge": "^3.700.0",
+    "@aws-sdk/credential-provider-node": "^3.700.0",
+    "@aws-sdk/lib-dynamodb": "^3.700.0",
+    "@aws-sdk/util-dynamodb": "^3.700.0",
+    "@opensearch-project/opensearch": "^3.0.0",
+    "ulid": "^2.3.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/aws-lambda": "^8.10.146",
+    "@types/node": "^22.10.2",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.17.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,24 @@
+# Entorno local: lo mínimo para desarrollar sin tocar AWS.
+#   pnpm local:up     -> levanta OpenSearch y DynamoDB Local
+#   pnpm local:init   -> crea la tabla "orderly" con el mismo esquema que Terraform
+#   pnpm local:down   -> apaga y borra los datos
+services:
+  opensearch:
+    image: opensearchproject/opensearch:2.17.1
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  dynamodb:
+    image: amazon/dynamodb-local:2.5.3
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+    ports:
+      - "8000:8000"

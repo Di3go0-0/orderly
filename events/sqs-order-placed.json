@@ -1,0 +1,15 @@
+{
+  "Records": [
+    {
+      "messageId": "msg-1",
+      "receiptHandle": "x",
+      "body": "{\"version\":\"0\",\"id\":\"eb-1\",\"detail-type\":\"OrderPlaced\",\"source\":\"orderly.orders\",\"account\":\"123456789012\",\"time\":\"2026-10-16T00:00:00Z\",\"region\":\"us-east-1\",\"resources\":[],\"detail\":{\"eventId\":\"evt-local-1\",\"eventType\":\"OrderPlaced\",\"source\":\"orders\",\"aggregateId\":\"order-local-1\",\"occurredAt\":\"2026-10-16T00:00:00.000Z\",\"payload\":{\"orderId\":\"order-local-1\",\"customerId\":\"customer-local\",\"lines\":[{\"productId\":\"REEMPLAZA_CON_ID_DE_PRODUCTO\",\"quantity\":2}],\"totalCents\":259800}}}",
+      "attributes": { "ApproximateReceiveCount": "1", "SentTimestamp": "0", "SenderId": "x", "ApproximateFirstReceiveTimestamp": "0" },
+      "messageAttributes": {},
+      "md5OfBody": "x",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:orderly-dev-inventory",
+      "awsRegion": "us-east-1"
+    }
+  ]
+}
