@@ -9,7 +9,6 @@ coverage/
 *.tfstate
 *.tfstate.*
 *.tfplan
-.terraform.lock.hcl
 crash.log
 terraform/envs/*/backend.hcl
 terraform/envs/*/*.auto.tfvars
